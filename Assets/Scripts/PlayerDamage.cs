@@ -10,6 +10,7 @@ public class PlayerDamage : MonoBehaviour
     private Animator anim;
     private FighterHealth health;
     private PlayerController playerController;
+    private string enemyAttackTag;
 
     void Start()
     {
@@ -17,75 +18,66 @@ public class PlayerDamage : MonoBehaviour
         health = GetComponent<FighterHealth>();
         playerController = GetComponent<PlayerController>();
         
-        Debug.Log("[" + gameObject.name + "] PlayerDamage initialized.  PlayerID: " + (playerController != null ? playerController.playerID. ToString() : "NULL"));
+        // Determine which attack tag to respond to
+        if (playerController != null)
+        {
+            if (playerController.playerID == 1)
+            {
+                enemyAttackTag = "P2_Attack"; // Player 1 gets hit by P2's attacks
+                Debug.Log("✅ Player 1 initialized - Will respond to:  P2_Attack");
+            }
+            else if (playerController. playerID == 2)
+            {
+                enemyAttackTag = "P1_Attack"; // Player 2 gets hit by P1's attacks
+                Debug.Log("✅ Player 2 initialized - Will respond to: P1_Attack");
+            }
+        }
+        else
+        {
+            Debug.LogError("❌ PlayerController not found on " + gameObject.name);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check if the thing that hit us is tagged "Attack"
-        if (other.CompareTag("Attack"))
+        Debug. Log("🔔 [" + gameObject.name + "] Detected:  " + other.name + " (Tag: " + other.tag + ")");
+        
+        // Only respond to ENEMY attacks
+        if (other.CompareTag(enemyAttackTag))
         {
-            Debug.Log("[" + gameObject. name + "] Detected attack from: " + other.gameObject.name);
+            Debug.Log("✅ [" + gameObject.name + "] VALID HIT!");
             
-            // ⭐ CRITICAL FIX: Check if this attack belongs to THIS player
-            // PunchHitbox is a CHILD of the player, so we check the parent
-            Transform attackParent = other.transform.parent;
-            
-            if (attackParent == this.transform)
-            {
-                Debug.Log("[" + gameObject.name + "] ❌ IGNORED - This is MY OWN attack!  (Parent match)");
-                return; // Don't hit yourself!
-            }
-            
-            // EXTRA CHECK: Compare PlayerID if both have PlayerController
-            if (playerController != null && attackParent != null)
-            {
-                PlayerController attackerController = attackParent.GetComponent<PlayerController>();
-                if (attackerController != null && attackerController.playerID == playerController. playerID)
-                {
-                    Debug.Log("[" + gameObject.name + "] ❌ IGNORED - Same PlayerID detected!");
-                    return;
-                }
-            }
-            
-            Debug.Log("[" + gameObject. name + "] ✅ VALID HIT from enemy!");
-            
-            // Determine damage based on attack type
+            // Determine damage
             float damage = punchDamage;
-            if (other.name.ToLower().Contains("kick") || other.name.ToLower().Contains("foot"))
+            if (other.name.Contains("Kick") || other.name.ToLower().Contains("kick"))
             {
                 damage = kickDamage;
             }
             
-            // Apply damage to health
+            // Apply damage
             if (health != null)
             {
-                health. TakeDamage(damage);
-                Debug.Log("[" + gameObject.name + "] Health reduced by " + damage);
-            }
-            else
-            {
-                Debug.LogError("[" + gameObject.name + "] No FighterHealth component!");
+                health.TakeDamage(damage);
+                Debug. Log("💥 [" + gameObject.name + "] HP: " + health.currentHealth);
             }
             
-            // Trigger the animation!
+            // Play animation
             if (anim != null)
             {
                 anim.SetTrigger("TakeDamage");
-                Debug.Log("[" + gameObject.name + "] TakeDamage animation triggered");
-            }
-            else
-            {
-                Debug.LogError("[" + gameObject.name + "] No Animator component!");
             }
             
-            // Knockback effect
+            // Knockback
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 Vector2 knockbackDir = (transform.position - other.transform.position).normalized;
-                rb.AddForce(knockbackDir * knockbackForce, ForceMode2D.Impulse);
+                rb.AddForce(knockbackDir * knockbackForce, ForceMode2D. Impulse);
             }
+        }
+        else
+        {
+            Debug.Log("❌ [" + gameObject.name + "] Wrong tag!  Ignoring.");
         }
     }
 }

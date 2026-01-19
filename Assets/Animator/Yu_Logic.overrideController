@@ -7,7 +7,7 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Yu_Logic
-  m_Controller: {fileID: 9100000, guid: e1c52cf3bf31f124aa36013a9da5263c, type: 2}
+  m_Controller: {fileID: 9100000, guid: aa3b3d1c2244c91419da9150384bdd08, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: c01378e83099524458797e8817fcd9d8, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: efe262e27a3e36347b5bd78f17d5354f, type: 2}
@@ -17,7 +17,7 @@ AnimatorOverrideController:
     m_OverrideClip: {fileID: 7400000, guid: 0cda1b773cbddb24a92ca08213826804, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: cb05d29314905d04eaf19f525309bf80, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 9ee7d51b1fc9acd4fb5f4d56353e4d62, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: e2502d1d396d4084aba5dd650fe92751, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 00e4ea8e94961684fa3c0bb1d1be56b3, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 9fbf155c038dc1d4fb0771b13e3b36a0, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: b57d45aecbafc514098d655d888ff027, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 52375229ae4b0bc4ab285a430657d8fc, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 00e4ea8e94961684fa3c0bb1d1be56b3, type: 2}

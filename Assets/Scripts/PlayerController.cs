@@ -10,25 +10,28 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer sprite;
-    private PlayerCombat combat; 
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
-        combat = GetComponent<PlayerCombat>(); 
 
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        if (rb != null)
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         // Force P2 to face West immediately
         if (playerID == 2) sprite.flipX = true; 
+        
+        Debug.Log("✅ [" + gameObject.name + "] PlayerController initialized.  PlayerID: " + playerID);
     }
 
     void Update()
     {
+        if (anim == null) return;
+        
         bool isAttacking = anim.GetCurrentAnimatorStateInfo(0).IsName("Punch") || 
-                           anim.GetCurrentAnimatorStateInfo(0).IsName("Kick");
+                           anim. GetCurrentAnimatorStateInfo(0).IsName("Kick");
 
         float moveInput = 0;
         if (playerID == 1) {
@@ -39,52 +42,74 @@ public class PlayerController : MonoBehaviour
             else if (Input.GetKey(KeyCode.RightArrow)) moveInput = 1;
         }
 
-        if (!isAttacking) {
-            rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-            anim.SetFloat("Speed", Mathf.Abs(moveInput));
+        if (! isAttacking) {
+            if (rb != null)
+                rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+            anim.SetFloat("Speed", Mathf. Abs(moveInput));
             
-            // 1. Handle Sprite Flipping during movement (Turning away to walk)
+            // Handle Sprite Flipping
             if (moveInput > 0) sprite.flipX = false;
             else if (moveInput < 0) sprite.flipX = true;
 
-            // 2. SNAP BACK: When no button is held, face the opponent again
+            // SNAP BACK when idle
             if (moveInput == 0)
             {
-                if (playerID == 1) sprite.flipX = false; // P1 faces East
-                else if (playerID == 2) sprite.flipX = true; // P2 faces West
+                if (playerID == 1) sprite.flipX = false;
+                else if (playerID == 2) sprite.flipX = true;
             }
         } else {
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            if (rb != null)
+                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             anim.SetFloat("Speed", 0);
         }
 
-        // --- ATTACK & JUMP CONTROL ---
+        // --- ATTACK & JUMP ---
         if (playerID == 1) 
         {
-            if (Input.GetKeyDown(KeyCode.W) && isGrounded && !isAttacking) Jump();
+            if (Input.GetKeyDown(KeyCode.W) && isGrounded && ! isAttacking) Jump();
             
-            if (Input.GetKeyDown(KeyCode.T)) combat.PerformAttack(10, "Punch");
-            if (Input.GetKeyDown(KeyCode.Y)) combat.PerformAttack(20, "Kick");
+            if (Input.GetKeyDown(KeyCode.T)) 
+            {
+                anim.SetTrigger("Punch");
+                Debug.Log("🥊 Player 1 Punch");
+            }
+            if (Input.GetKeyDown(KeyCode.Y)) 
+            {
+                anim.SetTrigger("Kick");
+                Debug.Log("🦵 Player 1 Kick");
+            }
         } 
         else if (playerID == 2) 
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow) && isGrounded && !isAttacking) Jump();
+            if (Input.GetKeyDown(KeyCode. UpArrow) && isGrounded && !isAttacking) Jump();
             
-            if (Input.GetKeyDown(KeyCode.J)) combat.PerformAttack(10, "Punch");
-            if (Input.GetKeyDown(KeyCode.K)) combat.PerformAttack(20, "Kick");
+            if (Input.GetKeyDown(KeyCode.J)) 
+            {
+                anim.SetTrigger("Punch");
+                Debug.Log("🥊 Player 2 Punch");
+            }
+            if (Input.GetKeyDown(KeyCode.K)) 
+            {
+                anim.SetTrigger("Kick");
+                Debug.Log("🦵 Player 2 Kick");
+            }
         }
     }
 
     void Jump() {
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        isGrounded = false;
-        anim.SetBool("isGrounded", false);
+        if (rb != null)
+        {
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            isGrounded = false;
+            anim.SetBool("isGrounded", false);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag("Ground")) {
             isGrounded = true;
-            anim.SetBool("isGrounded", true);
+            if (anim != null)
+                anim.SetBool("isGrounded", true);
         }
     }
 }
