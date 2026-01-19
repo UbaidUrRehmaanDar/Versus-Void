@@ -6,6 +6,6 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Naeem_Logic
+  m_Name: EMAM_Logic
   m_Controller: {fileID: 9100000, guid: e1c52cf3bf31f124aa36013a9da5263c, type: 2}
   m_Clips: []

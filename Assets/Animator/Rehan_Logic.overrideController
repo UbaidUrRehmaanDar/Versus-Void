@@ -7,15 +7,17 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Rehan_Logic
-  m_Controller: {fileID: 9100000, guid: 407703e7e79852749806b554fc66660e, type: 2}
+  m_Controller: {fileID: 9100000, guid: e1c52cf3bf31f124aa36013a9da5263c, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: c01378e83099524458797e8817fcd9d8, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 1e9c31f1b74cb0748bec69ed36d835bf, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 5eeaeab7d9ec2f9448b935063ea99b65, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 855cc103e47ca2f4798339d4faa1f1a8, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 43e5257e9e3c60d409343e983da4c869, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 63be415ffc5640c4fa38e33fe5493b9d, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: cb05d29314905d04eaf19f525309bf80, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: d264c549da59bcf48bda2521a3b15ed8, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: e2502d1d396d4084aba5dd650fe92751, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3e507f3dff7dc9b42ac4c3827c922461, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 9fbf155c038dc1d4fb0771b13e3b36a0, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: a1c867330b6cf1c4e8e7231968d324d6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: cb05d29314905d04eaf19f525309bf80, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d264c549da59bcf48bda2521a3b15ed8, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 43e5257e9e3c60d409343e983da4c869, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 8d73e84800bac7140b2bc8f049f464f6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5eeaeab7d9ec2f9448b935063ea99b65, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 855cc103e47ca2f4798339d4faa1f1a8, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: c01378e83099524458797e8817fcd9d8, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1e9c31f1b74cb0748bec69ed36d835bf, type: 2}

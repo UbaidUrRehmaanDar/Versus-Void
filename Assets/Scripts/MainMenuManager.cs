@@ -8,13 +8,13 @@ public class MainMenuManager : MonoBehaviour
 public void StartFullGame()
     {
         // This opens the Character Selection Screen
-        SceneManager.LoadScene("CharacterSelect"); 
+        SceneManager.LoadScene("1v1CharacterSelect"); 
     }
 
     public void StartDemo()
     {
         // Replace "DemoFight" with the exact name of your combat scene
-        SceneManager.LoadScene("DemoFight");
+        SceneManager.LoadScene("AI_CharacterSelect");
     }
 
     // This function will run when "Exit" is clicked
