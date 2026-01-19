@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Naeem_Logic
+  m_Controller: {fileID: 9100000, guid: 407703e7e79852749806b554fc66660e, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: c01378e83099524458797e8817fcd9d8, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6aad1766498bf2f4488679c9064af7e6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 43e5257e9e3c60d409343e983da4c869, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4d010a7814c81504da39d24ec2028a59, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: cb05d29314905d04eaf19f525309bf80, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1b14a7716af9e184db36d1e7231937df, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9fbf155c038dc1d4fb0771b13e3b36a0, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 19190098564b5964abb3c8f91582aeed, type: 2}
