@@ -263,7 +263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 80756974}
   - component: {fileID: 80756975}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: PunchHitbox
   m_TagString: Attack
   m_Icon: {fileID: 0}
@@ -1486,6 +1486,7 @@ GameObject:
   - component: {fileID: 1285215967}
   - component: {fileID: 1285215966}
   - component: {fileID: 1285215968}
+  - component: {fileID: 1285215969}
   m_Layer: 8
   m_Name: Player2
   m_TagString: Players
@@ -1730,6 +1731,21 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &1285215969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285215956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4287228024ffb543a97c2cd7e2f9e31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  punchDamage: 10
+  kickDamage: 15
+  knockbackForce: 5
 --- !u!1 &1623313066
 GameObject:
   m_ObjectHideFlags: 0
@@ -1982,13 +1998,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1819386280}
   - component: {fileID: 1819386281}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: PunchHitbox
   m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1819386280
 Transform:
   m_ObjectHideFlags: 0
@@ -2314,6 +2330,7 @@ GameObject:
   - component: {fileID: 1954674523}
   - component: {fileID: 1954674524}
   - component: {fileID: 1954674525}
+  - component: {fileID: 1954674526}
   m_Layer: 6
   m_Name: Player1
   m_TagString: Players
@@ -2558,6 +2575,21 @@ MonoBehaviour:
   - {fileID: 22100000, guid: 301992abeec2ec647921ed18ec2a06e7, type: 2}
   - {fileID: 22100000, guid: 4cc8f8b7322a10144b25f1ef67aabf0b, type: 2}
   - {fileID: 22100000, guid: 11971f239e5ea90458c7086788cb51ec, type: 2}
+--- !u!114 &1954674526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954674513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4287228024ffb543a97c2cd7e2f9e31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  punchDamage: 10
+  kickDamage: 15
+  knockbackForce: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
