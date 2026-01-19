@@ -1,7 +1,8 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // Needed to load scenes
-using System.Collections; // Needed for Coroutines
+using UnityEngine.UI; // Required for the Image component
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class TimerUI : MonoBehaviour
 {
@@ -12,10 +13,15 @@ public class TimerUI : MonoBehaviour
 
     [Header("End Game UI")]
     public GameObject endGamePanel; 
-    public TextMeshProUGUI winnerText; 
+    public Image resultImageDisplay; // Drag the 'ResultImage' object here
+
+    [Header("Result Sprites")]
+    public Sprite p1WonSprite; // Drag your "1p won" sprite here
+    public Sprite p2WonSprite; // Drag your "2p won" sprite here
+    public Sprite drawSprite;  // Drag your "draw" sprite here
 
     [Header("Scene Settings")]
-    public string mainMenuSceneName = "MainMenu"; // Make sure this matches your scene name!
+    public string mainMenuSceneName = "MainMenu";
 
     void Start()
     {
@@ -46,29 +52,34 @@ public class TimerUI : MonoBehaviour
 
     void ShowEndGame()
     {
-        if (endGamePanel == null) return;
+        if (endGamePanel == null || resultImageDisplay == null) return;
 
         endGamePanel.SetActive(true);
 
+        // Determine who won and show the correct sprite
         if (CharacterManager.instance != null)
         {
-            // This gets "PLAYER 1 WINS!", "PLAYER 2 WINS!", or "IT'S A DRAW!"
             string result = CharacterManager.instance.GetWinnerMessage();
-            winnerText.text = "TIME UP!\n" + result;
+
+            if (result == "PLAYER 1 WINS!") {
+                resultImageDisplay.sprite = p1WonSprite;
+            } else if (result == "PLAYER 2 WINS!") {
+                resultImageDisplay.sprite = p2WonSprite;
+            } else {
+                resultImageDisplay.sprite = drawSprite;
+            }
+            
+            // This makes the image fit its original sprite proportions
+            resultImageDisplay.SetNativeSize(); 
         }
 
-        // Start the 5-second countdown to exit
         StartCoroutine(WaitAndReturnToMenu());
     }
 
     IEnumerator WaitAndReturnToMenu()
     {
-        // We use 'WaitForSecondsRealtime' because Time.timeScale is usually 0 at game end
         yield return new WaitForSecondsRealtime(5f);
-        
-        // Reset the CharacterManager data so the next game is fresh
         if (CharacterManager.instance != null) CharacterManager.instance.ResetData();
-
         SceneManager.LoadScene(mainMenuSceneName);
     }
 }
