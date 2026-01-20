@@ -12,7 +12,6 @@ public class CharacterManager : MonoBehaviour
 
     void Awake() 
     {
-        // Singleton pattern: ensures this object persists between scenes
         if (instance == null) 
         { 
             instance = this; 
@@ -24,35 +23,37 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    // Called by the Stage buttons in your Menu
     public void SelectStage(string stageName) 
     {
         selectedStage = stageName;
-        Debug.Log("Stage selected: " + stageName);
+        Debug.Log("🏟️ Stage selected: " + stageName);
     }
 
-    // Called by the Start Fight button
     public void LaunchFight()
     {
-        if (!string.IsNullOrEmpty(selectedStage)) 
+        if (p1SelectedCharacter == -1 || p2SelectedCharacter == -1)
         {
-            Time.timeScale = 1f; // Ensure game isn't paused from a previous round
-            SceneManager.LoadScene(selectedStage);
+            Debug.LogError("❌ Cannot launch:  Characters not selected!");
+            return;
         }
-        else 
+        
+        if (string.IsNullOrEmpty(selectedStage)) 
         {
-            Debug.LogError("Cannot launch: No stage selected!");
+            Debug.LogError("❌ Cannot launch: No stage selected!");
+            return;
         }
+        
+        Debug.Log("🚀 Launching fight!  P1=" + p1SelectedCharacter + " P2=" + p2SelectedCharacter + " Stage=" + selectedStage);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(selectedStage);
     }
 
-    // This is used by the TimerUI to get the winner's name for the popup
     public string GetWinnerMessage()
     {
         float p1HP = 0;
         float p2HP = 0;
 
-        // Find all objects with FighterHealth in the current fight scene
-        FighterHealth[] allHealths = FindObjectsByType<FighterHealth>(FindObjectsSortMode.None);
+        FighterHealth[] allHealths = FindObjectsByType<FighterHealth>(FindObjectsSortMode. None);
         
         foreach(var h in allHealths) 
         {
@@ -60,7 +61,7 @@ public class CharacterManager : MonoBehaviour
             if (pc != null)
             {
                 if(pc.playerID == 1) p1HP = h.currentHealth;
-                else if(pc.playerID == 2) p2HP = h.currentHealth;
+                else if(pc. playerID == 2) p2HP = h.currentHealth;
             }
         }
 
@@ -69,12 +70,11 @@ public class CharacterManager : MonoBehaviour
         return "IT'S A DRAW!";
     }
 
-    // Useful for a "Return to Menu" button
     public void ResetData()
     {
         p1SelectedCharacter = -1;
         p2SelectedCharacter = -1;
         selectedStage = "";
-        Time.timeScale = 1f;
+        Time. timeScale = 1f;
     }
 }

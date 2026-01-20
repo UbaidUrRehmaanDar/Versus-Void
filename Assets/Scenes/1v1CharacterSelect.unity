@@ -528,6 +528,9 @@ MonoBehaviour:
   - {fileID: -2097619832946416524, guid: fcb20c984f3d5944fa6812fb4910b3cc, type: 3}
   - {fileID: -2097619832946416524, guid: 160e1a1024691004abcf2149e1de0240, type: 3}
   - {fileID: -2097619832946416524, guid: 812e78ce95104044a95844d81d98cce9, type: 3}
+  stageSelectionPanel: {fileID: 0}
+  selectionStatusText: {fileID: 0}
+  startButton: {fileID: 0}
 --- !u!1 &401747657
 GameObject:
   m_ObjectHideFlags: 0

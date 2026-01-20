@@ -20,7 +20,7 @@ public class MainMenuManager : MonoBehaviour
         campaignObj. AddComponent<CampaignManager>();
         
         Debug.Log(" Starting Campaign Mode");
-        SceneManager.LoadScene("AI_CharacterSelect");
+        SceneManager.LoadScene("Stage1_AI");
     }
 
     // Called by "1v1" button - Starts Versus Mode (2 players)
