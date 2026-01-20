@@ -8,80 +8,80 @@ public class DynamicCharacterLoader : MonoBehaviour
     void Awake() 
     {
         int charID = 0;
-        bool isCampaignMode = false;
         
-        // CHECK 1: Is this Campaign Mode?
+        // TRY CAMPAIGN MODE FIRST
         if (CampaignManager.instance != null)
         {
-            isCampaignMode = true;
-            Debug.Log("[" + gameObject.name + "] Campaign Mode detected!");
+            Debug.Log("🎮 [" + gameObject.name + "] CampaignManager found!");
             
-            // Check if this is Player or AI
             PlayerController pc = GetComponent<PlayerController>();
             AIController ai = GetComponent<AIController>();
             
             if (pc != null)
             {
-                // This is the human player
+                // Human player
                 charID = CampaignManager.instance.playerSelectedCharacter;
-                Debug.Log("[" + gameObject.name + "] Loading PLAYER character:   " + charID);
+                Debug.Log("👤 [" + gameObject. name + "] I'm the PLAYER!  Loading character ID: " + charID);
             }
             else if (ai != null)
             {
-                // This is the AI opponent
-                charID = CampaignManager. instance.GetCurrentOpponentCharacterID();
-                Debug.Log("[" + gameObject.name + "] Loading AI OPPONENT character:  " + charID);
+                // AI opponent
+                charID = CampaignManager.instance.GetCurrentOpponentCharacterID();
+                Debug.Log("🤖 [" + gameObject.name + "] I'm the AI!  Loading character ID: " + charID);
+            }
+            else
+            {
+                Debug.LogError("❌ [" + gameObject.name + "] Has DynamicCharacterLoader but no PlayerController or AIController!");
             }
         }
-        // CHECK 2: Is this 1v1 Mode?
-        else if (CharacterManager.instance != null)
+        // TRY 1V1 MODE
+        else if (CharacterManager. instance != null)
         {
-            Debug.Log("[" + gameObject. name + "] 1v1 Mode detected!");
+            Debug.Log("⚔️ [" + gameObject.name + "] CharacterManager found (1v1 mode)");
             
             PlayerController pc = GetComponent<PlayerController>();
-            if (pc == null)
+            if (pc != null)
             {
-                Debug.LogError("[" + gameObject.name + "] No PlayerController found in 1v1 mode!");
-                return;
+                charID = (pc.playerID == 1) ? CharacterManager.instance.p1SelectedCharacter : CharacterManager.instance.p2SelectedCharacter;
+                Debug.Log("👤 [" + gameObject. name + "] Player " + pc.playerID + " loading character ID: " + charID);
             }
-            
-            charID = (pc.playerID == 1) ? CharacterManager. instance.p1SelectedCharacter : CharacterManager.instance.p2SelectedCharacter;
-            Debug.Log("[" + gameObject.name + "] Loading character for Player " + pc.playerID + ": " + charID);
         }
-        // CHECK 3: No manager found - use default
+        // NO MANAGER
         else
         {
-            Debug.LogWarning("[" + gameObject.name + "] No CharacterManager or CampaignManager found!  Using default character (index 0).");
+            Debug.LogWarning("⚠️ [" + gameObject.name + "] No manager found! Using character 0");
             charID = 0;
         }
 
-        // Default to 0 if invalid
-        if (charID == -1 || charID < 0) 
+        // Validate
+        if (charID < 0 || charID >= allCharacterSprites.Length)
         {
-            Debug.LogWarning("[" + gameObject.name + "] Invalid character ID (" + charID + "), defaulting to 0");
+            Debug.LogWarning("⚠️ [" + gameObject.name + "] Invalid charID " + charID + ", using 0");
             charID = 0;
         }
 
-        // Apply sprite
-        if (allCharacterSprites != null && charID < allCharacterSprites.Length && allCharacterSprites[charID] != null)
+        // APPLY SPRITE
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr != null && allCharacterSprites != null && charID < allCharacterSprites.Length && allCharacterSprites[charID] != null)
         {
-            GetComponent<SpriteRenderer>().sprite = allCharacterSprites[charID];
-            Debug.Log("[" + gameObject.name + "] ✅ Loaded sprite for character " + charID);
+            sr.sprite = allCharacterSprites[charID];
+            Debug.Log("✅ [" + gameObject.name + "] Sprite loaded for character " + charID);
         }
         else
         {
-            Debug.LogError("[" + gameObject.name + "] ❌ Failed to load sprite for character " + charID);
+            Debug.LogError("❌ [" + gameObject.name + "] FAILED to load sprite for character " + charID);
         }
         
-        // Apply animator
-        if (allControllers != null && charID < allControllers.Length && allControllers[charID] != null)
+        // APPLY ANIMATOR
+        Animator anim = GetComponent<Animator>();
+        if (anim != null && allControllers != null && charID < allControllers.Length && allControllers[charID] != null)
         {
-            GetComponent<Animator>().runtimeAnimatorController = allControllers[charID];
-            Debug. Log("[" + gameObject.name + "] ✅ Loaded animator for character " + charID);
+            anim.runtimeAnimatorController = allControllers[charID];
+            Debug.Log("✅ [" + gameObject.name + "] Animator loaded for character " + charID);
         }
         else
         {
-            Debug.LogError("[" + gameObject.name + "] ❌ Failed to load animator for character " + charID);
+            Debug.LogError("❌ [" + gameObject.name + "] FAILED to load animator for character " + charID);
         }
     }
 }

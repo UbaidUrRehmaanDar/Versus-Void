@@ -1,29 +1,28 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CampaignManager :  MonoBehaviour
+public class CampaignManager : MonoBehaviour
 {
     public static CampaignManager instance;
     
     [Header("Campaign Progress")]
-    public int currentStage = 1; // Which AI opponent (1, 2, 3, or 4)
-    public int playerSelectedCharacter = -1; // Player's character choice
+    public int currentStage = 1;
+    public int playerSelectedCharacter = 0; // 0, 1, 2, or 3
     
     [Header("Scene Names")]
-    public string stage1Scene = "Stage1_AI";  // Fight Character 2
-    public string stage2Scene = "Stage2_AI";  // Fight Character 3
-    public string stage3Scene = "Stage3_AI";  // Fight Character 4
-    public string victoryScene = "VictoryScreen"; // Final victory
+    public string stage1Scene = "Stage1_AI";
+    public string stage2Scene = "Stage2_AI";
+    public string stage3Scene = "Stage3_AI";
+    public string victoryScene = "VictoryScreen";
     public string mainMenuScene = "MainMenu";
     
     void Awake()
     {
-        // Singleton pattern - persist across scenes
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            Debug.Log("✅ CampaignManager created and persisting across scenes");
+            Debug.Log("✅ CampaignManager created");
         }
         else
         {
@@ -36,7 +35,7 @@ public class CampaignManager :  MonoBehaviour
         currentStage = 1;
         playerSelectedCharacter = playerCharacterID;
         
-        Debug.Log("🎮 Campaign Started! Player chose character: " + playerCharacterID);
+        Debug.Log("🎮 CAMPAIGN STARTED! Player chose character:  " + playerCharacterID);
         
         LoadNextStage();
     }
@@ -49,19 +48,16 @@ public class CampaignManager :  MonoBehaviour
         
         if (currentStage == 2)
         {
-            // Beat Character 2 → Fight Character 3
-            Debug.Log("⏭️ Loading Stage 2 (Character 3)");
+            Debug. Log("⏭️ Loading Stage 2");
             SceneManager.LoadScene(stage2Scene);
         }
         else if (currentStage == 3)
         {
-            // Beat Character 3 → Fight Character 4
-            Debug.Log("⏭️ Loading Stage 3 (Character 4)");
+            Debug. Log("⏭️ Loading Stage 3");
             SceneManager.LoadScene(stage3Scene);
         }
         else if (currentStage == 4)
         {
-            // Beat Character 4 → VICTORY! 
             Debug.Log("🎉 CAMPAIGN COMPLETE!");
             SceneManager.LoadScene(victoryScene);
             ResetCampaign();
@@ -70,7 +66,7 @@ public class CampaignManager :  MonoBehaviour
     
     public void PlayerLost()
     {
-        Debug. Log("💀 Player LOST at Stage " + currentStage);
+        Debug.Log("💀 Player LOST at Stage " + currentStage);
         Debug.Log("↩️ Returning to Main Menu");
         
         ResetCampaign();
@@ -96,15 +92,20 @@ public class CampaignManager :  MonoBehaviour
     public void ResetCampaign()
     {
         currentStage = 1;
-        playerSelectedCharacter = -1;
+        playerSelectedCharacter = 0;
         Debug.Log("🔄 Campaign Reset");
     }
     
     public int GetCurrentOpponentCharacterID()
     {
-        // Stage 1 = Character 2 (ID 1)
-        // Stage 2 = Character 3 (ID 2)
-        // Stage 3 = Character 4 (ID 3)
-        return currentStage; // Assuming character IDs match stage numbers
+        // Stage 1 → Fight Character 2 (array index 1)
+        // Stage 2 → Fight Character 3 (array index 2)
+        // Stage 3 → Fight Character 4 (array index 3)
+        
+        int opponentID = currentStage; // Stage 1 = opponent 1, Stage 2 = opponent 2, etc.
+        
+        Debug.Log("🤖 Stage " + currentStage + " opponent character ID: " + opponentID);
+        
+        return opponentID;
     }
 }

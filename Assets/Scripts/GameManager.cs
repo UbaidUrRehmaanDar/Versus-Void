@@ -16,10 +16,10 @@ public class GameManager : MonoBehaviour
     
     [Header("Settings")]
     public string mainMenuSceneName = "MainMenu";
-    public float endGameDelay = 3f; // Reduced from 5 to 3
+    public float endGameDelay = 3f;
     
     [Header("Campaign Mode")]
-    public bool isCampaignMode = false; // Set TRUE in AI stages, FALSE in 1v1
+    public bool isCampaignMode = false;
     
     private bool gameEnded = false;
 
@@ -39,11 +39,17 @@ public class GameManager : MonoBehaviour
         if (player1WinsImage != null) player1WinsImage.SetActive(false);
         if (player2WinsImage != null) player2WinsImage.SetActive(false);
         if (drawImage != null) drawImage.SetActive(false);
+        
+        Debug.Log("🎮 GameManager started.  Campaign Mode: " + isCampaignMode);
     }
 
     public void EndMatch()
     {
-        if (gameEnded) return;
+        if (gameEnded)
+        {
+            Debug.Log("⚠️ Match already ended, ignoring duplicate call");
+            return;
+        }
         
         gameEnded = true;
         
@@ -54,19 +60,24 @@ public class GameManager : MonoBehaviour
 
     void ShowEndGame()
     {
-        if (endGamePanel == null) return;
-
-        endGamePanel.SetActive(true);
+        if (endGamePanel != null)
+        {
+            endGamePanel. SetActive(true);
+            Debug.Log("✅ End game panel activated");
+        }
+        else
+        {
+            Debug.LogError("❌ endGamePanel is NULL!");
+        }
 
         string result = GetWinner();
         
-        Debug.Log("🏆 Winner Result: '" + result + "'");
+        Debug.Log("🏆 Winner: " + result);
 
         if (result == "PLAYER 1 WINS!")
         {
             if (player1WinsImage != null) player1WinsImage.SetActive(true);
             
-            // Campaign mode:  Player won! 
             if (isCampaignMode && CampaignManager.instance != null)
             {
                 StartCoroutine(CampaignWin());
@@ -77,7 +88,6 @@ public class GameManager : MonoBehaviour
         {
             if (player2WinsImage != null) player2WinsImage.SetActive(true);
             
-            // Campaign mode: Player lost (AI won)
             if (isCampaignMode && CampaignManager.instance != null)
             {
                 StartCoroutine(CampaignLoss());
@@ -88,7 +98,6 @@ public class GameManager : MonoBehaviour
         {
             if (drawImage != null) drawImage.SetActive(true);
             
-            // Draw in campaign = loss
             if (isCampaignMode && CampaignManager.instance != null)
             {
                 StartCoroutine(CampaignLoss());
@@ -96,28 +105,71 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Normal 1v1 mode - just return to menu
         StartCoroutine(ReturnToMenu());
     }
 
     string GetWinner()
     {
-        float p1HP = 0;
-        float p2HP = 0;
+        float p1HP = -1;
+        float p2HP = -1;
 
         FighterHealth[] allHealths = FindObjectsByType<FighterHealth>(FindObjectsSortMode.None);
         
+        Debug.Log("🔍 Found " + allHealths.Length + " FighterHealth components");
+        
         foreach (var h in allHealths)
         {
+            string objName = h.gameObject.name;
+            Debug.Log("   Checking: " + objName + " HP: " + h.currentHealth);
+            
+            // Check by PlayerController
             PlayerController pc = h.GetComponent<PlayerController>();
             if (pc != null)
             {
-                if (pc.playerID == 1) p1HP = h.currentHealth;
-                else if (pc.playerID == 2) p2HP = h.currentHealth;
+                if (pc.playerID == 1)
+                {
+                    p1HP = h.currentHealth;
+                    Debug.Log("   ✅ This is Player 1");
+                }
+                else if (pc.playerID == 2)
+                {
+                    p2HP = h.currentHealth;
+                    Debug.Log("   ✅ This is Player 2");
+                }
+            }
+            // Check by AIController
+            else
+            {
+                AIController ai = h.GetComponent<AIController>();
+                if (ai != null)
+                {
+                    p2HP = h.currentHealth;
+                    Debug.Log("   ✅ This is AI (Player 2)");
+                }
+            }
+        }
+        
+        // Fallback:  check by name
+        if (p1HP < 0 || p2HP < 0)
+        {
+            Debug.LogWarning("⚠️ Couldn't identify players by script, trying by name.. .");
+            
+            foreach (var h in allHealths)
+            {
+                if (h.gameObject.name. Contains("Player1") || h.gameObject.name == "Player1")
+                {
+                    p1HP = h. currentHealth;
+                    Debug. Log("   Found Player1 by name:  HP = " + p1HP);
+                }
+                if (h.gameObject.name. Contains("Player2") || h.gameObject.name == "Player2")
+                {
+                    p2HP = h.currentHealth;
+                    Debug.Log("   Found Player2 by name: HP = " + p2HP);
+                }
             }
         }
 
-        Debug.Log("💚 P1 Health: " + p1HP + " | P2 Health: " + p2HP);
+        Debug.Log("💚 FINAL HP - P1: " + p1HP + " | P2: " + p2HP);
 
         if (p1HP > p2HP) return "PLAYER 1 WINS!";
         if (p2HP > p1HP) return "PLAYER 2 WINS!";
@@ -128,12 +180,8 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(endGameDelay);
         
-        // Hide images
         if (player1WinsImage != null) player1WinsImage.SetActive(false);
-        if (player2WinsImage != null) player2WinsImage.SetActive(false);
-        if (drawImage != null) drawImage.SetActive(false);
         
-        // Load next stage
         CampaignManager.instance.PlayerWon();
     }
 
@@ -141,13 +189,10 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(endGameDelay);
         
-        // Hide images
-        if (player1WinsImage != null) player1WinsImage.SetActive(false);
         if (player2WinsImage != null) player2WinsImage.SetActive(false);
         if (drawImage != null) drawImage.SetActive(false);
         
-        // Return to main menu
-        CampaignManager.instance.PlayerLost();
+        CampaignManager. instance.PlayerLost();
     }
 
     IEnumerator ReturnToMenu()
