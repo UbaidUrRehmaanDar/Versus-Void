@@ -5,9 +5,10 @@ public class FighterHealth : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth;
     
-    public HealthBarUI healthBar; // Drag your HealthBar object here
+    public HealthBarUI healthBar;
 
     private Animator anim;
+    private bool isDead = false;
 
     void Start()
     {
@@ -16,16 +17,17 @@ public class FighterHealth : MonoBehaviour
 
         if (healthBar != null)
         {
-            healthBar.SetHealth(currentHealth, maxHealth);
+            healthBar. SetHealth(currentHealth, maxHealth);
         }
     }
 
     public void TakeDamage(float damage)
     {
+        if (isDead) return; // Don't take damage if already dead
+        
         currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        currentHealth = Mathf. Clamp(currentHealth, 0, maxHealth);
 
-        // DEBUG: Watch the console to see the numbers drop!
         Debug.Log(gameObject.name + " Health: " + currentHealth);
 
         if (healthBar != null)
@@ -35,13 +37,19 @@ public class FighterHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            isDead = true;
             anim.SetTrigger("Killed");
-            Debug.Log(gameObject.name + " has been KO'd!");
+            Debug.Log("💀 " + gameObject.name + " has been KO'd!");
+            
+            // END THE MATCH! 
+            if (GameManager.instance != null)
+            {
+                GameManager. instance.EndMatch();
+            }
         }
         else
         {
-            // SYNCED: Using your exact trigger name
-            anim.SetTrigger("TakeDamage2"); 
+            anim.SetTrigger("TakeDamage2");
         }
     }
 }

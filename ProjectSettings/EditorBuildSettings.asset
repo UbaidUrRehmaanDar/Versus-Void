@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 801eb548c848ab943b3fede3c03a47ec
   - enabled: 1
-    path: Assets/Scenes/DemoFight.unity
+    path: Assets/Scenes/1v1ABlock.unity
     guid: 18caed92e580e8a46a8b2f764b09ef6e
   - enabled: 1
     path: Assets/Scenes/1v1CharacterSelect.unity
