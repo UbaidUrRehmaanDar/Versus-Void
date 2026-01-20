@@ -17,10 +17,10 @@ public class FighterHealth : MonoBehaviour
         
         if (healthBar != null)
         {
-            healthBar.SetHealth(currentHealth, maxHealth);
+            healthBar. SetHealth(currentHealth, maxHealth);
         }
         
-        Debug.Log("💚 [" + gameObject.name + "] Health initialized:  " + currentHealth + "/" + maxHealth);
+        Debug.Log(" [" + gameObject.name + "] Health: " + currentHealth + "/" + maxHealth);
     }
 
     public void TakeDamage(float damage)
@@ -33,15 +33,13 @@ public class FighterHealth : MonoBehaviour
         if (currentHealth < 0)
             currentHealth = 0;
         
-        Debug.Log("💥 [" + gameObject.name + "] Took " + damage + " damage!  HP: " + oldHealth + " → " + currentHealth);
+        Debug.Log(" [" + gameObject.name + "] Damage: " + damage + " | HP: " + oldHealth + " → " + currentHealth);
         
-        // Update health bar
         if (healthBar != null)
         {
-            healthBar.SetHealth(currentHealth, maxHealth);
+            healthBar. SetHealth(currentHealth, maxHealth);
         }
         
-        // Check if dead
         if (currentHealth <= 0 && !isDead)
         {
             Die();
@@ -52,17 +50,16 @@ public class FighterHealth : MonoBehaviour
     {
         isDead = true;
         
-        Debug.Log("💀 [" + gameObject.name + "] DIED!");
+        Debug.Log(" [" + gameObject. name + "] DIED!");
         
-        // End the match
         if (GameManager.instance != null)
         {
-            Debug.Log("🏁 Calling GameManager.EndMatch()");
+            Debug.Log(" Calling GameManager.EndMatch()");
             GameManager.instance.EndMatch();
         }
         else
         {
-            Debug.LogError("❌ GameManager not found!  Can't end match!");
+            Debug.LogError(" GameManager not found!");
         }
     }
 
