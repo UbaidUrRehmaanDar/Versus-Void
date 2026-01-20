@@ -392,4 +392,13 @@ public class AIController : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, optimalRange);
     }
+
+    // In your AI_CharacterSelect button click handler: 
+    public void OnPlayerSelectCharacter(int characterID)
+    {
+        if (CampaignManager.instance != null)
+        {
+            CampaignManager.instance.StartCampaign(characterID);
+        }
+    }
 }

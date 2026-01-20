@@ -2,9 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System. Collections;
+using System.Collections;
 
-public class GameManager :  MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     
@@ -16,7 +16,10 @@ public class GameManager :  MonoBehaviour
     
     [Header("Settings")]
     public string mainMenuSceneName = "MainMenu";
-    public float endGameDelay = 5f;
+    public float endGameDelay = 3f; // Reduced from 5 to 3
+    
+    [Header("Campaign Mode")]
+    public bool isCampaignMode = false; // Set TRUE in AI stages, FALSE in 1v1
     
     private bool gameEnded = false;
 
@@ -40,7 +43,7 @@ public class GameManager :  MonoBehaviour
 
     public void EndMatch()
     {
-        if (gameEnded) return; // Prevent multiple calls
+        if (gameEnded) return;
         
         gameEnded = true;
         
@@ -55,7 +58,6 @@ public class GameManager :  MonoBehaviour
 
         endGamePanel.SetActive(true);
 
-        // Determine who won
         string result = GetWinner();
         
         Debug.Log("🏆 Winner Result: '" + result + "'");
@@ -63,16 +65,38 @@ public class GameManager :  MonoBehaviour
         if (result == "PLAYER 1 WINS!")
         {
             if (player1WinsImage != null) player1WinsImage.SetActive(true);
+            
+            // Campaign mode:  Player won! 
+            if (isCampaignMode && CampaignManager.instance != null)
+            {
+                StartCoroutine(CampaignWin());
+                return;
+            }
         }
         else if (result == "PLAYER 2 WINS!")
         {
             if (player2WinsImage != null) player2WinsImage.SetActive(true);
+            
+            // Campaign mode: Player lost (AI won)
+            if (isCampaignMode && CampaignManager.instance != null)
+            {
+                StartCoroutine(CampaignLoss());
+                return;
+            }
         }
-        else // Draw
+        else
         {
             if (drawImage != null) drawImage.SetActive(true);
+            
+            // Draw in campaign = loss
+            if (isCampaignMode && CampaignManager.instance != null)
+            {
+                StartCoroutine(CampaignLoss());
+                return;
+            }
         }
 
+        // Normal 1v1 mode - just return to menu
         StartCoroutine(ReturnToMenu());
     }
 
@@ -81,7 +105,6 @@ public class GameManager :  MonoBehaviour
         float p1HP = 0;
         float p2HP = 0;
 
-        // Find all FighterHealth components
         FighterHealth[] allHealths = FindObjectsByType<FighterHealth>(FindObjectsSortMode.None);
         
         foreach (var h in allHealths)
@@ -101,16 +124,41 @@ public class GameManager :  MonoBehaviour
         return "IT'S A DRAW!";
     }
 
-    IEnumerator ReturnToMenu()
+    IEnumerator CampaignWin()
     {
         yield return new WaitForSecondsRealtime(endGameDelay);
         
-        // Hide all images
+        // Hide images
         if (player1WinsImage != null) player1WinsImage.SetActive(false);
         if (player2WinsImage != null) player2WinsImage.SetActive(false);
         if (drawImage != null) drawImage.SetActive(false);
         
-        if (CharacterManager. instance != null)
+        // Load next stage
+        CampaignManager.instance.PlayerWon();
+    }
+
+    IEnumerator CampaignLoss()
+    {
+        yield return new WaitForSecondsRealtime(endGameDelay);
+        
+        // Hide images
+        if (player1WinsImage != null) player1WinsImage.SetActive(false);
+        if (player2WinsImage != null) player2WinsImage.SetActive(false);
+        if (drawImage != null) drawImage.SetActive(false);
+        
+        // Return to main menu
+        CampaignManager.instance.PlayerLost();
+    }
+
+    IEnumerator ReturnToMenu()
+    {
+        yield return new WaitForSecondsRealtime(endGameDelay);
+        
+        if (player1WinsImage != null) player1WinsImage.SetActive(false);
+        if (player2WinsImage != null) player2WinsImage.SetActive(false);
+        if (drawImage != null) drawImage.SetActive(false);
+        
+        if (CharacterManager.instance != null)
             CharacterManager.instance.ResetData();
         
         SceneManager.LoadScene(mainMenuSceneName);
