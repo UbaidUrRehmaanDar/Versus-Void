@@ -1483,10 +1483,10 @@ GameObject:
   - component: {fileID: 1285215961}
   - component: {fileID: 1285215963}
   - component: {fileID: 1285215965}
-  - component: {fileID: 1285215967}
   - component: {fileID: 1285215966}
   - component: {fileID: 1285215969}
   - component: {fileID: 1285215970}
+  - component: {fileID: 1285215971}
   m_Layer: 8
   m_Name: Player2
   m_TagString: Players
@@ -1698,25 +1698,6 @@ MonoBehaviour:
   - {fileID: 22100000, guid: 301992abeec2ec647921ed18ec2a06e7, type: 2}
   - {fileID: 22100000, guid: 4cc8f8b7322a10144b25f1ef67aabf0b, type: 2}
   - {fileID: 22100000, guid: 11971f239e5ea90458c7086788cb51ec, type: 2}
---- !u!114 &1285215967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1285215956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e060148b2f9f04e459368d61e098340a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerID: 2
-  moveSpeed: 5
-  jumpForce: 10
-  isGrounded: 0
-  voidPrefab: {fileID: 5249244390495843200, guid: f51004181c5070d48ac9af4879b87e17, type: 3}
-  voidSpawnPoint: {fileID: 2115911835}
-  specialCooldown: 2
 --- !u!114 &1285215969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1746,6 +1727,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitbox: {fileID: 80731546}
   showDebugLogs: 1
+--- !u!114 &1285215971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285215956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0733cfc654b86d8448a66f94a7161e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  moveSpeed: 4
+  jumpForce: 10
+  isGrounded: 0
+  attackRange: 1.5
+  optimalRange: 2
+  attackCooldown: 0.8
+  reactionTime: 0.3
+  aggressiveness: 0.7
+  voidPrefab: {fileID: 0}
+  voidSpawnPoint: {fileID: 0}
+  specialCooldown: 3
+  specialMoveChance: 0.2
+  currentState: 0
 --- !u!1 &1438244700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1781,7 +1788,7 @@ MonoBehaviour:
   drawImage: {fileID: 380300078}
   mainMenuSceneName: MainMenu
   endGameDelay: 5
-  isCampaignMode: 0
+  isCampaignMode: 1
 --- !u!4 &1438244702
 Transform:
   m_ObjectHideFlags: 0
