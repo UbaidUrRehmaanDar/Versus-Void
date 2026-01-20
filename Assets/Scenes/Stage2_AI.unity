@@ -1781,6 +1781,7 @@ MonoBehaviour:
   drawImage: {fileID: 380300078}
   mainMenuSceneName: MainMenu
   endGameDelay: 5
+  isCampaignMode: 0
 --- !u!4 &1438244702
 Transform:
   m_ObjectHideFlags: 0

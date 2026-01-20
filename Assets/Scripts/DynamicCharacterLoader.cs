@@ -7,36 +7,81 @@ public class DynamicCharacterLoader : MonoBehaviour
 
     void Awake() 
     {
-        // Safety check:  If CharacterManager doesn't exist, use defaults
-        if (CharacterManager. instance == null)
-        {
-            Debug.LogWarning("[" + gameObject.name + "] CharacterManager not found! Using default character (index 0).");
-            
-            if (allCharacterSprites != null && allCharacterSprites.Length > 0)
-                GetComponent<SpriteRenderer>().sprite = allCharacterSprites[0];
-            
-            if (allControllers != null && allControllers.Length > 0)
-                GetComponent<Animator>().runtimeAnimatorController = allControllers[0];
-            
-            return;
-        }
+        int charID = 0;
+        bool isCampaignMode = false;
         
-        PlayerController pc = GetComponent<PlayerController>();
-        if (pc == null)
+        // CHECK 1: Is this Campaign Mode?
+        if (CampaignManager.instance != null)
         {
-            Debug.LogError("[" + gameObject.name + "] No PlayerController found!");
-            return;
+            isCampaignMode = true;
+            Debug.Log("[" + gameObject.name + "] Campaign Mode detected!");
+            
+            // Check if this is Player or AI
+            PlayerController pc = GetComponent<PlayerController>();
+            AIController ai = GetComponent<AIController>();
+            
+            if (pc != null)
+            {
+                // This is the human player
+                charID = CampaignManager.instance.playerSelectedCharacter;
+                Debug.Log("[" + gameObject.name + "] Loading PLAYER character:   " + charID);
+            }
+            else if (ai != null)
+            {
+                // This is the AI opponent
+                charID = CampaignManager. instance.GetCurrentOpponentCharacterID();
+                Debug.Log("[" + gameObject.name + "] Loading AI OPPONENT character:  " + charID);
+            }
         }
-        
-        int charID = (pc.playerID == 1) ? CharacterManager.instance.p1SelectedCharacter : CharacterManager.instance.p2SelectedCharacter;
+        // CHECK 2: Is this 1v1 Mode?
+        else if (CharacterManager.instance != null)
+        {
+            Debug.Log("[" + gameObject. name + "] 1v1 Mode detected!");
+            
+            PlayerController pc = GetComponent<PlayerController>();
+            if (pc == null)
+            {
+                Debug.LogError("[" + gameObject.name + "] No PlayerController found in 1v1 mode!");
+                return;
+            }
+            
+            charID = (pc.playerID == 1) ? CharacterManager. instance.p1SelectedCharacter : CharacterManager.instance.p2SelectedCharacter;
+            Debug.Log("[" + gameObject.name + "] Loading character for Player " + pc.playerID + ": " + charID);
+        }
+        // CHECK 3: No manager found - use default
+        else
+        {
+            Debug.LogWarning("[" + gameObject.name + "] No CharacterManager or CampaignManager found!  Using default character (index 0).");
+            charID = 0;
+        }
 
-        // Default to 0 if none selected
-        if (charID == -1) charID = 0;
+        // Default to 0 if invalid
+        if (charID == -1 || charID < 0) 
+        {
+            Debug.LogWarning("[" + gameObject.name + "] Invalid character ID (" + charID + "), defaulting to 0");
+            charID = 0;
+        }
 
-        if (allCharacterSprites != null && charID < allCharacterSprites. Length)
+        // Apply sprite
+        if (allCharacterSprites != null && charID < allCharacterSprites.Length && allCharacterSprites[charID] != null)
+        {
             GetComponent<SpriteRenderer>().sprite = allCharacterSprites[charID];
+            Debug.Log("[" + gameObject.name + "] ✅ Loaded sprite for character " + charID);
+        }
+        else
+        {
+            Debug.LogError("[" + gameObject.name + "] ❌ Failed to load sprite for character " + charID);
+        }
         
-        if (allControllers != null && charID < allControllers. Length)
+        // Apply animator
+        if (allControllers != null && charID < allControllers.Length && allControllers[charID] != null)
+        {
             GetComponent<Animator>().runtimeAnimatorController = allControllers[charID];
+            Debug. Log("[" + gameObject.name + "] ✅ Loaded animator for character " + charID);
+        }
+        else
+        {
+            Debug.LogError("[" + gameObject.name + "] ❌ Failed to load animator for character " + charID);
+        }
     }
 }
